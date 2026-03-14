@@ -71,7 +71,7 @@ export const fallbackStandings: StandingsResponse = {
     { id: "cska", name: "ЦСКА", seed: 5 },
     { id: "tor", name: "Торпедо", seed: 6 },
     { id: "min", name: "Минск", seed: 7 },
-    { id: "soch", name: "Сочи", seed: 8 }
+    { id: "soch", name: "Сочи", seed: 8 },
   ],
   east: [
     { id: "met", name: "Металлург", seed: 1 },
@@ -81,8 +81,8 @@ export const fallbackStandings: StandingsResponse = {
     { id: "trat", name: "Трактор", seed: 5 },
     { id: "sibir", name: "Сибирь", seed: 6 },
     { id: "bar", name: "Барыс", seed: 7 },
-    { id: "amur", name: "Амур", seed: 8 }
-  ]
+    { id: "amur", name: "Амур", seed: 8 },
+  ],
 };
 
 export const stages: Stage[] = [
@@ -105,9 +105,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "west", seed: 1 } },
-                  { seedSource: { conference: "west", seed: 8 } }
+                  { seedSource: { conference: "west", seed: 8 } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "w2",
@@ -115,9 +115,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "west", seed: 2 } },
-                  { seedSource: { conference: "west", seed: 7 } }
+                  { seedSource: { conference: "west", seed: 7 } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "w3",
@@ -125,9 +125,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "west", seed: 3 } },
-                  { seedSource: { conference: "west", seed: 6 } }
+                  { seedSource: { conference: "west", seed: 6 } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "w4",
@@ -135,13 +135,13 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "west", seed: 4 } },
-                  { seedSource: { conference: "west", seed: 5 } }
+                  { seedSource: { conference: "west", seed: 5 } },
                 ],
-                score: [0, 0]
-              }
-            ]
-          }
-        ]
+                score: [0, 0],
+              },
+            ],
+          },
+        ],
       },
       {
         id: "east-1",
@@ -157,9 +157,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "east", seed: 1 } },
-                  { seedSource: { conference: "east", seed: 8 } }
+                  { seedSource: { conference: "east", seed: 8 } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "e2",
@@ -167,9 +167,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "east", seed: 2 } },
-                  { seedSource: { conference: "east", seed: 7 } }
+                  { seedSource: { conference: "east", seed: 7 } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "e3",
@@ -177,9 +177,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "east", seed: 3 } },
-                  { seedSource: { conference: "east", seed: 6 } }
+                  { seedSource: { conference: "east", seed: 6 } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "e4",
@@ -187,15 +187,15 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { seedSource: { conference: "east", seed: 4 } },
-                  { seedSource: { conference: "east", seed: 5 } }
+                  { seedSource: { conference: "east", seed: 5 } },
                 ],
-                score: [0, 0]
-              }
-            ]
-          }
-        ]
-      }
-    ]
+                score: [0, 0],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "stage-2",
@@ -216,9 +216,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-1", groupId: "west-1", matchId: "w1" } },
-                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e4" } }
+                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e4" } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "c2",
@@ -226,11 +226,11 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-1", groupId: "west-1", matchId: "w2" } },
-                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e3" } }
+                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e3" } },
                 ],
-                score: [0, 0]
-              }
-            ]
+                score: [0, 0],
+              },
+            ],
           },
           {
             id: "r2",
@@ -242,13 +242,13 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-2", groupId: "cross-a", matchId: "c1" } },
-                  { source: { stageId: "stage-2", groupId: "cross-a", matchId: "c2" } }
+                  { source: { stageId: "stage-2", groupId: "cross-a", matchId: "c2" } },
                 ],
-                score: [0, 0]
-              }
-            ]
-          }
-        ]
+                score: [0, 0],
+              },
+            ],
+          },
+        ],
       },
       {
         id: "cross-b",
@@ -264,9 +264,9 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-1", groupId: "west-1", matchId: "w3" } },
-                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e2" } }
+                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e2" } },
                 ],
-                score: [0, 0]
+                score: [0, 0],
               },
               {
                 id: "c5",
@@ -274,11 +274,11 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-1", groupId: "west-1", matchId: "w4" } },
-                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e1" } }
+                  { source: { stageId: "stage-1", groupId: "east-1", matchId: "e1" } },
                 ],
-                score: [0, 0]
-              }
-            ]
+                score: [0, 0],
+              },
+            ],
           },
           {
             id: "r2",
@@ -290,15 +290,15 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-2", groupId: "cross-b", matchId: "c4" } },
-                  { source: { stageId: "stage-2", groupId: "cross-b", matchId: "c5" } }
+                  { source: { stageId: "stage-2", groupId: "cross-b", matchId: "c5" } },
                 ],
-                score: [0, 0]
-              }
-            ]
-          }
-        ]
-      }
-    ]
+                score: [0, 0],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "stage-3",
@@ -319,15 +319,14 @@ export const stages: Stage[] = [
                 bestOf: 7,
                 teams: [
                   { source: { stageId: "stage-2", groupId: "cross-a", matchId: "c3" } },
-                  { source: { stageId: "stage-2", groupId: "cross-b", matchId: "c6" } }
+                  { source: { stageId: "stage-2", groupId: "cross-b", matchId: "c6" } },
                 ],
-                score: [0, 0]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+                score: [0, 0],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
-

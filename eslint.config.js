@@ -10,7 +10,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["**/*.{ts,tsx}"] ,
+    files: ["**/*.{ts,tsx}"],
     plugins: {
       react,
       "react-hooks": reactHooks,
@@ -30,10 +30,10 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*.{js,ts,tsx}"] ,
+    files: ["**/*.{js,ts,tsx}"],
     rules: {
-      "no-unused-vars": "off"
-    }
+      "no-unused-vars": "off",
+    },
   },
-  prettier
+  prettier,
 );
