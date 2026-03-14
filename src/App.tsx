@@ -2,6 +2,15 @@
 import type { Group, Match, StandingsResponse, TeamSlot } from "./data/bracket";
 import { fallbackStandings, stages as initialStages } from "./data/bracket";
 
+const STORAGE_KEY = "khl-sim-state";
+
+type AppState = {
+  stages: typeof initialStages;
+  activeStageId: string;
+  standings: StandingsResponse;
+  standingsStatus: "idle" | "loading" | "ready" | "error";
+};
+
 const getWinsNeeded = (bestOf: number) => Math.ceil(bestOf / 2);
 
 const cloneStages = (value: typeof initialStages) => structuredClone(value);
@@ -44,11 +53,8 @@ const buildStandingsIndex = (standings: StandingsResponse) => {
   return map;
 };
 
-const getSeedTeam = (
-  standings: StandingsResponse,
-  conference: "west" | "east",
-  seed: number,
-) => standings[conference].find((team) => team.seed === seed) ?? null;
+const getSeedTeam = (standings: StandingsResponse, conference: "west" | "east", seed: number) =>
+  standings[conference].find((team) => team.seed === seed) ?? null;
 
 const resolveTeamId = (
   stages: typeof initialStages,
@@ -80,11 +86,8 @@ const getTeamLabel = (
   return standingsIndex.get(teamId) ?? "Ожидается";
 };
 
-const getTeamId = (
-  stages: typeof initialStages,
-  slot: TeamSlot,
-  standings: StandingsResponse,
-) => resolveTeamId(stages, slot, standings);
+const getTeamId = (stages: typeof initialStages, slot: TeamSlot, standings: StandingsResponse) =>
+  resolveTeamId(stages, slot, standings);
 
 const getSeedLabel = (slot: TeamSlot) => {
   if (!slot.seedSource) return "";
@@ -97,6 +100,7 @@ const MatchCard = ({
   stageId,
   groupId,
   onPick,
+  onScoreChange,
   standings,
   standingsIndex,
 }: {
@@ -105,11 +109,19 @@ const MatchCard = ({
   stageId: string;
   groupId: string;
   onPick: (stageId: string, groupId: string, matchId: string, winnerIndex: 0 | 1) => void;
+  onScoreChange: (
+    stageId: string,
+    groupId: string,
+    matchId: string,
+    teamIndex: 0 | 1,
+    delta: 1 | -1,
+  ) => void;
   standings: StandingsResponse;
   standingsIndex: Map<string, string>;
 }) => {
   const winnerIndex = getMatchWinnerIndex(match);
   const winsNeeded = getWinsNeeded(match.bestOf);
+  const isLocked = winnerIndex !== null;
   return (
     <div className="match-card">
       <div className="match-meta">
@@ -128,6 +140,23 @@ const MatchCard = ({
         </span>
         <span className="team-seed">{getSeedLabel(match.teams[0])}</span>
       </button>
+      <div className="score-controls">
+        <button
+          className="score-button"
+          onClick={() => onScoreChange(stageId, groupId, match.id, 0, -1)}
+          disabled={isLocked || match.score[0] <= 0}
+        >
+          ?
+        </button>
+        <span className="score-value">{match.score[0]}</span>
+        <button
+          className="score-button"
+          onClick={() => onScoreChange(stageId, groupId, match.id, 0, 1)}
+          disabled={isLocked || match.score[0] >= winsNeeded}
+        >
+          +
+        </button>
+      </div>
       <button
         className={`team-row ${winnerIndex === 1 ? "team-row--winner" : ""}`}
         onClick={() => onPick(stageId, groupId, match.id, 1)}
@@ -138,6 +167,23 @@ const MatchCard = ({
         </span>
         <span className="team-seed">{getSeedLabel(match.teams[1])}</span>
       </button>
+      <div className="score-controls">
+        <button
+          className="score-button"
+          onClick={() => onScoreChange(stageId, groupId, match.id, 1, -1)}
+          disabled={isLocked || match.score[1] <= 0}
+        >
+          ?
+        </button>
+        <span className="score-value">{match.score[1]}</span>
+        <button
+          className="score-button"
+          onClick={() => onScoreChange(stageId, groupId, match.id, 1, 1)}
+          disabled={isLocked || match.score[1] >= winsNeeded}
+        >
+          +
+        </button>
+      </div>
     </div>
   );
 };
@@ -147,6 +193,7 @@ const GroupView = ({
   stages,
   stageId,
   onPick,
+  onScoreChange,
   standings,
   standingsIndex,
 }: {
@@ -154,6 +201,13 @@ const GroupView = ({
   stages: typeof initialStages;
   stageId: string;
   onPick: (stageId: string, groupId: string, matchId: string, winnerIndex: 0 | 1) => void;
+  onScoreChange: (
+    stageId: string,
+    groupId: string,
+    matchId: string,
+    teamIndex: 0 | 1,
+    delta: 1 | -1,
+  ) => void;
   standings: StandingsResponse;
   standingsIndex: Map<string, string>;
 }) => {
@@ -173,6 +227,7 @@ const GroupView = ({
                   stageId={stageId}
                   groupId={group.id}
                   onPick={onPick}
+                  onScoreChange={onScoreChange}
                   standings={standings}
                   standingsIndex={standingsIndex}
                 />
@@ -197,9 +252,25 @@ export default function App() {
   const [stages, setStages] = useState(() => cloneStages(initialStages));
   const [activeStageId, setActiveStageId] = useState(stages[0].id);
   const [standings, setStandings] = useState<StandingsResponse>(fallbackStandings);
-  const [standingsStatus, setStandingsStatus] = useState<
-    "idle" | "loading" | "ready" | "error"
-  >("loading");
+  const [standingsStatus, setStandingsStatus] = useState<"idle" | "loading" | "ready" | "error">(
+    "loading",
+  );
+
+  useEffect(() => {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw) as AppState;
+      if (data?.stages && data?.activeStageId && data?.standings && data?.standingsStatus) {
+        setStages(data.stages);
+        setActiveStageId(data.activeStageId);
+        setStandings(data.standings);
+        setStandingsStatus(data.standingsStatus);
+      }
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -221,6 +292,16 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const state: AppState = {
+      stages,
+      activeStageId,
+      standings,
+      standingsStatus,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }, [stages, activeStageId, standings, standingsStatus]);
+
   const standingsIndex = useMemo(() => buildStandingsIndex(standings), [standings]);
 
   const activeStage = useMemo(
@@ -228,12 +309,7 @@ export default function App() {
     [stages, activeStageId],
   );
 
-  const handlePick = (
-    stageId: string,
-    groupId: string,
-    matchId: string,
-    winnerIndex: 0 | 1,
-  ) => {
+  const handlePick = (stageId: string, groupId: string, matchId: string, winnerIndex: 0 | 1) => {
     setStages((current) => {
       const next = cloneStages(current);
       const match = findMatch(next, stageId, groupId, matchId);
@@ -244,8 +320,32 @@ export default function App() {
     });
   };
 
+  const handleScoreChange = (
+    stageId: string,
+    groupId: string,
+    matchId: string,
+    teamIndex: 0 | 1,
+    delta: 1 | -1,
+  ) => {
+    setStages((current) => {
+      const next = cloneStages(current);
+      const match = findMatch(next, stageId, groupId, matchId);
+      if (!match) return current;
+      const winsNeeded = getWinsNeeded(match.bestOf);
+      if (getMatchWinnerIndex(match) !== null) return current;
+      const currentScore = match.score[teamIndex];
+      const nextScore = Math.max(0, Math.min(winsNeeded, currentScore + delta));
+      match.score = teamIndex === 0 ? [nextScore, match.score[1]] : [match.score[0], nextScore];
+      return next;
+    });
+  };
+
   const handleReset = () => {
     setStages(cloneStages(initialStages));
+    setActiveStageId(initialStages[0].id);
+    setStandings(fallbackStandings);
+    setStandingsStatus("ready");
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   return (
@@ -278,8 +378,8 @@ export default function App() {
             <div className="hero-subtitle">Симулятор плей-офф КХЛ</div>
             <h1>Плей-офф КХЛ 2025/26: симуляция результатов</h1>
             <p>
-              Выбирайте победителей матчей, чтобы увидеть путь команд к Кубку Гагарина. Со
-              2-й стадии команды делятся на группы с перекрестным плей-офф.
+              Выбирайте победителей матчей, чтобы увидеть путь команд к Кубку Гагарина. Со 2-й
+              стадии команды делятся на группы с перекрестным плей-офф.
             </p>
             <div className="hero-actions">
               <button className="primary-button" onClick={handleReset}>
@@ -315,6 +415,7 @@ export default function App() {
                 stages={stages}
                 stageId={activeStage.id}
                 onPick={handlePick}
+                onScoreChange={handleScoreChange}
                 standings={standings}
                 standingsIndex={standingsIndex}
               />
@@ -329,4 +430,3 @@ export default function App() {
     </div>
   );
 }
-

@@ -20,9 +20,10 @@ const parseTable = ($, table) => {
       cells
         .toArray()
         .map((cell) => $(cell))
-        .find((cell) =>
-          cell.attr("class")?.toLowerCase().includes("team") ||
-          cell.attr("class")?.toLowerCase().includes("name"),
+        .find(
+          (cell) =>
+            cell.attr("class")?.toLowerCase().includes("team") ||
+            cell.attr("class")?.toLowerCase().includes("name"),
         ) ?? $(cells[1]);
     const name = nameCell.find("a").first().text().trim() || nameCell.text().trim();
     if (!name) return;

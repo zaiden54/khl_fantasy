@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap&subset=cyrillic");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap&subset=cyrillic");
 
 :root {
   color-scheme: dark;
@@ -78,7 +78,8 @@ body {
 .primary-button,
 .ghost-button,
 .stage-tab,
-.team-row {
+.team-row,
+.score-button {
   font-family: inherit;
 }
 
@@ -249,7 +250,7 @@ main {
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .match-meta {
@@ -290,6 +291,36 @@ main {
   color: var(--muted);
 }
 
+.score-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.score-button {
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.score-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.score-value {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+}
+
 .footer {
   border-top: 1px solid var(--border);
   padding: 18px 36px;
@@ -317,4 +348,47 @@ main {
   }
 }
 
+@media (max-width: 768px) {
+  .topbar {
+    align-items: flex-start;
+  }
 
+  .topbar-actions {
+    flex-wrap: wrap;
+  }
+
+  .stage-tabs {
+    flex-wrap: wrap;
+  }
+
+  .groups {
+    grid-template-columns: 1fr;
+  }
+
+  .match-card,
+  .team-row {
+    width: 100%;
+  }
+
+  .rounds {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 20px;
+  }
+
+  .hero h1 {
+    font-size: 22px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .score-controls {
+    justify-content: center;
+  }
+}
