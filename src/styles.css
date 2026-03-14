@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Space+Grotesk:wght@400;600&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap&subset=cyrillic");
 
 :root {
   color-scheme: dark;
@@ -20,7 +20,7 @@
 
 body {
   margin: 0;
-  font-family: "Space Grotesk", "Montserrat", system-ui, sans-serif;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
   background: radial-gradient(circle at top, #162038 0%, #0b1120 45%, #070d1a 100%);
   color: var(--text);
 }
@@ -316,3 +316,5 @@ main {
     font-size: 26px;
   }
 }
+
+
